@@ -1,0 +1,12 @@
+name: Ping API Endpoint
+
+on:
+  schedule:
+    - cron: '*/3 * * * *'  # Runs every 3 minutes
+
+jobs:
+  ping-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make HTTP Request
+        run: curl -s -o /dev/null -w "%{http_code}" https://hoocup.onrender.com
