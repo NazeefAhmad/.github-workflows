@@ -3,10 +3,17 @@ name: Ping API Endpoint
 on:
   schedule:
     - cron: '*/3 * * * *'  # Runs every 3 minutes
+  workflow_dispatch:  # Enables manual trigger
 
 jobs:
   ping-api:
     runs-on: ubuntu-latest
     steps:
       - name: Make HTTP Request
-        run: curl -s -o /dev/null -w "%{http_code}" https://hoocup.onrender.com
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://hoocup.onrender.com)
+          echo "HTTP Status Code: $RESPONSE"
+          if [ "$RESPONSE" -ne 200 ]; then
+            echo "Error: API returned non-200 status code"
+            exit 1
+          fi
